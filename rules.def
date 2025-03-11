@@ -38,7 +38,7 @@ From: centos:7
     # Activate conda environment and install Kaolin
     . /opt/conda/etc/profile.d/conda.sh
     conda activate base
-    pip install kaolin==0.13.0 -f https://nvidia-kaolin.s3.us-east-2.amazonaws.com/torch-1.12.1_cu116.html
+    pip install https://nvidia-kaolin.s3.us-east-2.amazonaws.com/torch-1.12.1_cu116/kaolin-0.13.0-cp39-cp39-linux_x86_64.whl
 
     # Clean up
     conda clean -afy
