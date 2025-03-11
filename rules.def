@@ -1,6 +1,10 @@
 Bootstrap: docker
 From: centos:7
 
+%setup
+    # Create the destination directory
+    mkdir -p /opt/app
+
 %files
     * /opt/app
 
@@ -15,12 +19,6 @@ From: centos:7
     yum -y update
     yum -y groupinstall "Development Tools"
     yum -y install wget which
-
-    # Install CUDA 11.6
-    # wget https://developer.download.nvidia.com/compute/cuda/11.6.0/local_installers/cuda-repo-rhel7-11-6-local-11.6.0_510.39.01-1.x86_64.rpm
-    # rpm -i cuda-repo-rhel7-11-6-local-11.6.0_510.39.01-1.x86_64.rpm
-    # yum clean all
-    # yum -y install cuda-11-6
 
     # Install Miniconda
     wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh
