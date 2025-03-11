@@ -3,7 +3,7 @@ From: centos:7
 
 %setup
     # Create the destination directory
-    mkdir -p /opt/app
+    mkdir -p ${SINGULARITY_ROOTFS}/opt/app
 
 %files
     * /opt/app
