@@ -1,0 +1,56 @@
+Bootstrap: docker
+From: centos:7
+
+%files
+    * /opt/app
+
+%environment
+    export PATH=/opt/conda/bin:$PATH
+    export CUDA_HOME=/usr/local/cuda
+    export LD_LIBRARY_PATH=/usr/local/cuda/lib64:$LD_LIBRARY_PATH
+    export PATH=/usr/local/cuda/bin:$PATH
+
+%post
+    # Install system dependencies
+    yum -y update
+    yum -y groupinstall "Development Tools"
+    yum -y install wget which
+
+    # Install CUDA 11.6
+    # wget https://developer.download.nvidia.com/compute/cuda/11.6.0/local_installers/cuda-repo-rhel7-11-6-local-11.6.0_510.39.01-1.x86_64.rpm
+    # rpm -i cuda-repo-rhel7-11-6-local-11.6.0_510.39.01-1.x86_64.rpm
+    # yum clean all
+    # yum -y install cuda-11-6
+
+    # Install Miniconda
+    wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh
+    bash miniconda.sh -b -p /opt/conda
+    rm miniconda.sh
+
+    # Add conda to path
+    export PATH=/opt/conda/bin:$PATH
+
+    # Create conda environment
+    cd /opt/app
+    conda env create -f environment.yaml
+
+    # Activate conda environment and install Kaolin
+    . /opt/conda/etc/profile.d/conda.sh
+    conda activate base
+    pip install kaolin==0.13.0 -f https://nvidia-kaolin.s3.us-east-2.amazonaws.com/torch-1.12.1_cu116.html
+
+    # Clean up
+    conda clean -afy
+    rm -rf /var/cache/yum/*
+    yum clean all
+
+%runscript
+    . /opt/conda/etc/profile.d/conda.sh
+    conda activate base
+    exec "$@"
+
+%labels
+    Author Osmani Dion
+    Version v1.0
+    CUDA_Version 11.6
+    PyTorch_Version 1.12.1
